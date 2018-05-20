@@ -40,9 +40,12 @@ app.get('/blockchain', function(req, res){
 //This will register a transaction
 
 app.post('/transaction', function(req, res){
-	const blockNumber = bitcoin.createNewTransaction(req.body.amount, req.body.sender, req.body.receiver);
-	res.json({note: 'Transaction will be added in ${blockNumber}.'});
-});
+	 const newTransaction = req.body;
+	 const blockIndex = bitcoin.addTransactionToPendingTransactions(newTransaction);
+
+	 res.json({note:`Transaction will be added in block ${blockIndex}`});
+
+);
 
 //Transaction Broadcast
 app.post('/transaction/broadcast', function(req, res){
