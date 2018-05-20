@@ -1,9 +1,12 @@
 const sha256 = require ('sha256');
-
+//Final thing to do is to get Genesis block. So to do this, we create the first block in the method
+//It doesn't matter for the first block but for every other we need to use legitimate parameters
 
 function Blockchain(){
 	this.chain = [];
 	this.pendingTransactions = [];
+
+	this.createNewBlock(102, 'E2A', '2D');
 
 }
 
