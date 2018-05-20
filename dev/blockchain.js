@@ -130,8 +130,8 @@ Blockchain.prototype.hashBlock = function(previousBlockHash, currentBlockData, n
 Blockchain.prototype.proofOfWork = function(previousBlockHash, currentBlockHash){
 	//acceptable hash starts with 4 zeros in our case '0000ISAS2CWDASD'
 
-	let nonce = 0;
-	let hash = this.hashBlock(previousBlockHash, currentBlockData, nonce);
+	var nonce = 0;
+	var hash = this.hashBlock(previousBlockHash, currentBlockData, nonce);
 
 	//constantly run the hash block method
 	//Substring from 0 to 4 not including 4. 
