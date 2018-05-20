@@ -1,2 +1,1 @@
-echo "<scriptname> <commit message>"
 git add -A; git commit -m $1; echo 'mbhatt1\nMahabhondu13\n' | git push origin master
