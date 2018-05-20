@@ -5,3 +5,10 @@ I am going to skip testing for now. Will do the testing later
 After building the basic DS, we build the API to talk to it using express framework
 
 After the endpoints for registration have been added, now we need to sync the network
+
+After that, consensus to figure out if a particular piece of data is correct. 
+
+The one we will use is called longestt chain. Compare chain on chosen node to other chains in network. If one of the chains has a longer length, we replace the 
+current chain to the longest chain. The longest chain is trustable because more work was done in that chain. 
+
+

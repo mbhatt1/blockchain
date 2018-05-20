@@ -12,7 +12,7 @@ function Blockchain(){
 	
 	this.createNewBlock(102, 'E2A', '2D');
 	
-}
+};
 
 /*
 //In javascript: Really no classes therefore creating constructor functions are used above
@@ -53,7 +53,7 @@ Blockchain.prototype.createNewBlock = function (nonce, previousBlockHash, hash){
 	
 	//return new Block
 	return newBlock;
-}
+};
 
 
 
@@ -68,7 +68,7 @@ test.js
 Blockchain.prototype.getLastBlock = function(){
 	return this.chain[this.chain.length-1];
 
-}
+};
 //This is for New transaction
 //@params: amount= amount to send, receiver = receipient, sender = sender person
 Blockchain.prototype.createNewTransaction = function (amount, sender, receiver){
@@ -93,7 +93,7 @@ Blockchain.prototype.createNewTransaction = function (amount, sender, receiver){
 	//The following: it creates the block that our transaction is added to. Now we will test this. 
 //	return this.getLastBlock()['index'] + 1;
 	return newTransaction;
-}
+};
 
 //Create new method to add transaction
 
@@ -121,7 +121,7 @@ Blockchain.prototype.hashBlock = function(previousBlockHash, currentBlockData, n
 	return hash;
 
 	
-}
+};
 
 /*
 	Next method we are going to add is the proof of work (PoW) method. This is import. Essential! 
@@ -160,7 +160,39 @@ Blockchain.prototype.proofOfWork = function(previousBlockHash, currentBlockHash)
 	//now after correct nonce is created, return the nonce value. 
 
 	return nonce;
-}
+};
+
+
+//Chain is valid method
+
+Blockchain.prototype.chainIsValid(blockchain){
+	var validChain = true;
+	for (var i = 1; i < blockchain.length; i++){
+		const currentBlock = blockchain[i];
+		const prevBlock = blockchain[i-1];
+		const blockHash = this.hashBlock(prevBlock['hash'], {transactions: currentBlock['transactions'], index:currentBlock['index']}, currentBlock['nonce']);
+
+		if (blockHash.substring(0,4) !== '0000') validChain = false;
+		//Genesis block? it should have properties that we put onto it. 
+		if (currentBlock['previousBlockHash'] !== prevBlock['hash']){
+			validChain = false;
+		
+		}
+
+	};	
+
+	const genesisBlock = blockchain[0];
+	const correctNonce = genesisBlock['nonce'] === 102;
+	const correctPreviousBlockHash = genesisBlock['previousBlockHash'] === 'E2A';
+	const correctHash = genesisBlock['hash'] === '2D';
+	const correctTransactions = genesisBlock['transactions'].length === 0;
+
+	if (!correctNonce || !correctPreviousBlockHash || !correctHash || correctTransactions) validChain = false;
+	
+	return validChain;
+};
+
+
 
 //The following is for exporting
 module.exports = Blockchain;
