@@ -105,6 +105,45 @@ Blockchain.prototype.hashBlock = function(previousBlockHash, currentBlockData, n
 	
 }
 
+/*
+	Next method we are going to add is the proof of work (PoW) method. This is import. Essential! 
+	One of the major reasons why blockchain tech is secure. We wanna make sure every block added to the chain is legitimate. Because otherwise fraud is possible. So what does this method do?
+	It takes current block data and previous block hash. By taking these two things, it will try to generate a specific hash. In our case it will start with 4 zeros. The only way we do this is 
+	by trial and error. So we run the hashBlock method several times. 
+
+	How can we possibly generate multiple hashes by passing in same data?
+	bitcoin.hashBlock(previousBlockHash, currentBlockData, nonce);
+
+	We are going to be constantly changing the nonce value. 
+
+
+	Essentially: repeatedly hash block until we find correct block. We change the input to the hashBlock method by incrementing the nonce value. 
+
+	So, how does the PoW method secure the block chain? This is because inorder to generate the correct hash, we have to run the method tens of thousands of times. So in many chases trying to 
+	recreate a hash requires a lot of computation power. So, recreating a block using fake data isn't feasible generally. 
+
+*/
+
+Blockchain.prototype.proofOfWork = function(previousBlockHash, currentBlockHash){
+	//acceptable hash starts with 4 zeros in our case '0000ISAS2CWDASD'
+
+	let nonce = 0;
+	let hash = this.hashBlock(previousBlockHash, currentBlockData, nonce);
+
+	//constantly run the hash block method
+	//Substring from 0 to 4 not including 4. 
+
+	while(hash.substring(0,4) !== '0000'){
+		nonce ++;
+		hash = this.hashBlock(previousBlockHash, currentBlockData, nonce);
+	}
+
+	//The above will look for a proper hash
+	//now after correct nonce is created, return the nonce value. 
+
+	return nonce;
+}
+
 //The following is for exporting
 module.exports = Blockchain;
 
