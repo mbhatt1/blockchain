@@ -39,9 +39,34 @@ app.get('/blockchain', function(req, res){
 
 //This will register a transaction
 
-app.post('/transaction', function(req, rest){
+app.post('/transaction', function(req, res){
 	const blockNumber = bitcoin.createNewTransaction(req.body.amount, req.body.sender, req.body.receiver);
 	res.json({note: 'Transaction will be added in ${blockNumber}.'});
+});
+
+//Transaction Broadcast
+app.post('/transaction/broadcast', function(req, res){
+	const newTransaction = bitcoin.createNewTransaction(req.body.amount, req.body.sender, req.body.receiver);
+	bitcoin.addTransactionToPendingTransactions(newTransaction);
+	const requestPromises = [];
+	bitcoin.networkNodes.forEach(networkNodeUrl => {
+		//hit the transactions endpoint
+
+		const requestOptions = {
+			uri: networkNodeUrl + '/transaction',
+			method: 'POST',
+			body: newTransaction, 
+			json: true
+		};
+
+		requestPromises.push(rp(requestOptions));
+	});
+
+
+	Promise.all(requestPromises)
+	.then(data => {
+		res.json({note: 'Transaction created and broadcasted successfully'});
+	});
 });
 
 //Register nodes

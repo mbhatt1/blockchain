@@ -2,6 +2,7 @@ const sha256 = require ('sha256');
 //Final thing to do is to get Genesis block. So to do this, we create the first block in the method
 //It doesn't matter for the first block but for every other we need to use legitimate parameters
 const currentNodeUrl = process.argv[3];
+const uuid = require('uuid/v1');
 
 function Blockchain(){
 	this.chain = [];
@@ -76,12 +77,13 @@ Blockchain.prototype.createNewTransaction = function (amount, sender, receiver){
 	const newTransaction = {
 		amount: amount,
 		sender: sender,
-		receiver: receiver, 
+		receiver: receiver,
+		transactionId: uuid().split('-').join('') 
 	};
 
 	//all of the transactions we will record will look like above. Now we need to push the new transactions to our array in the constructor function. 
 
-	this.pendingTransactions.push(newTransaction);
+//	this.pendingTransactions.push(newTransaction);
 	/*
 		Basically, on our blockchain, there are gonna be a lot of transactions. Everytime a new one is made, we push it in the array. But all the transactions arent recorded yet, i.e aren't
 		recorded yet. They get recorded when a new block is mined, i.e when a new block is created. All of these transactions are basically pending transactions and are validated only when a 
@@ -89,8 +91,18 @@ Blockchain.prototype.createNewTransaction = function (amount, sender, receiver){
 	*/
 
 	//The following: it creates the block that our transaction is added to. Now we will test this. 
-	return this.getLastBlock()['index'] + 1;
+//	return this.getLastBlock()['index'] + 1;
+	return newTransaction;
 }
+
+//Create new method to add transaction
+
+Blockchain.prototype.addTransactionToPendingTransactions = function(transactionObj){
+	this.pendingTransactions.push(transactionObj);
+	return this.getLastBlock()['index'] + 1;
+};
+
+
 
 
 /*
