@@ -3,3 +3,5 @@ This is me following a tutorial on creating blockchains
 I am going to skip testing for now. Will do the testing later
 
 After building the basic DS, we build the API to talk to it using express framework
+
+After the endpoints for registration have been added, now we need to sync the network
