@@ -3,16 +3,26 @@ express js
 
 */
 
-
 const express = require('express');
-
+const process = require('process');
 const app = express();
 const bodyParser = require('body-parser');
 const Blockchain = require('./blockchain');
 const bitcoin = new Blockchain();
 const uuid = require('uuid/v1');
-
+const package_json = require('read-package-json');
+const port = process.argv[2] || 3000;
 const nodeaddress = uuid().split('-').join('');
+
+package_json('./package.json', console.error, false, function(er, data){
+	if (er){
+		console.error("There was an error reading package.json");
+		return
+	}
+// 	port = data['config']['port'];
+//	console.error(port);
+});
+
 
 app.use(bodyParser.json());
 
@@ -61,6 +71,6 @@ app.get('/mine', function(req, res){
 
 
 //listening on port 3000
-app.listen(3000, function(){
-	console.log('listening on port 3000...');
+app.listen(port, function(){
+	console.log('listening on port %s...', port);
 });

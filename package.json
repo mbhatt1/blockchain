@@ -2,17 +2,26 @@
   "name": "blockchain",
   "version": "1.0.0",
   "description": "",
-  "main": "dev/api.js",
+  "main": "'dev/networkNode.js'",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --watch dev -e js"
+    "node_1": "nodemon --watch dev -e js dev/networkNode.js 3001",
+    "node_2": "nodemon --watch dev -e js dev/networkNode.js 3002",
+    "node_3": "nodemon --watch dev -e js dev/networkNode.js 3003",
+    "node_4": "nodemon --watch dev -e js dev/networkNode.js 3004",
+    "node_5": "nodemon --watch dev -e js dev/networkNode.js 3005"
   },
-  "author": "",
+  "config": {
+    "port": 3001
+  },
+  "author": "Alex \"The Sage\"",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
     "nodemon": "^1.17.4",
+    "process": "^0.11.10",
+    "read-package-json": "^2.0.13",
     "sha256": "^0.2.0",
     "uuid": "^3.2.1"
   }
