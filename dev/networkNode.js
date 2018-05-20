@@ -13,6 +13,8 @@ const uuid = require('uuid/v1');
 const package_json = require('read-package-json');
 const port = process.argv[2] || 3000;
 const nodeaddress = uuid().split('-').join('');
+const rp = require('request-promise');
+
 
 package_json('./package.json', console.error, false, function(er, data){
 	if (er){
@@ -42,6 +44,60 @@ app.post('/transaction', function(req, rest){
 	res.json({note: 'Transaction will be added in ${blockNumber}.'});
 });
 
+//Register nodes
+
+
+app.post('/register-and-broadcast-node', function(req, res){
+	const newNodeUrl = req.body.newNodeUrl;
+	//Do some calculations and broadcast it to the network	
+	if (bitcoin.networkNodes.indexOf(newNodeUrl) == -1) bitcoin.networknodes.push(newNodeUrl);
+
+	const regNodePromises = [];
+	bitcoin.networkNodes.forEach(networkNodeUrl => {
+		//hit the register node end point
+		const requestOptions = {
+			uri: networknodeUrl + '/register-node',
+			method: 'POST',
+			body: {newNodeUrl: newNodeUrl},
+			json: true
+		};		
+	
+		regNodePromises.push(rp(requestOptions));
+	});
+
+
+	Promise.all(regNodesPromises)
+	.then (data => {
+		//use the data.. 
+		const bulkRegisterOptions = {
+			uri: newNodeUrl+ '/register-nodes-bulk', 
+			method: 'POST',
+			body: {allNetworkNodes: [ ...bitcoin.networkNodes, bitcoin.currentNodeUrl]},
+			json: true
+		};		
+
+		return rp(bulkRegisterOptions);
+	}).then(data => {
+		res.json({note: 'New Node Registered with Network Successfully'});
+
+	});
+
+
+	
+});
+
+
+//After broadcast register node
+app.post('/register-node', function(req, res){
+	//Register Node after broadcast is received 
+
+});
+
+
+app.post('/register-nodes-bulk', function(req, res){
+
+
+});
 
 //This creates a new block for us that we can mine
 
