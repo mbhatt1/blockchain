@@ -1,3 +1,5 @@
+const sha256 = require ('sha256');
+
 
 function Blockchain(){
 	this.chain = [];
@@ -85,8 +87,23 @@ Blockchain.prototype.createNewTransaction = function (amount, sender, receiver){
 }
 
 
+/*
+	The method will take a block and hash that block into some fixed length string which is basically random. We will use SHA256. 
+*/
+Blockchain.prototype.hashBlock = function(previousBlockHash, currentBlockData, nonce){
+	//import a library
 
+	//change data to a string. JSON.stringify turns the array to a string
 
+	const dataAsString = previousBlockHash + nonce.toString() + JSON.stringify(currentBlockData);
+
+	//Create Hash. Hash of the data is now created. Then return it. 
+	const hash = sha256(dataAsString);
+
+	return hash;
+
+	
+}
 
 //The following is for exporting
 module.exports = Blockchain;
