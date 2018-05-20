@@ -82,8 +82,6 @@ app.post('/register-and-broadcast-node', function(req, res){
 
 	});
 
-
-	
 });
 
 
@@ -91,12 +89,40 @@ app.post('/register-and-broadcast-node', function(req, res){
 app.post('/register-node', function(req, res){
 	//Register Node after broadcast is received 
 
+	const newNodeUrl = req.body.newNodeUrl;
+	const nodeNotAlreadyPresent = bitcoin.networkNodes.indexOf(newNodeUrl) == -1;
+	const notCurrentNode = bitcoin.currentNodeUrl !== newNodeUrl;
+	if (nodeNotAlreadyPresent && notCurrentNode) 
+		{
+		bitcoin.networkNodes.push(newNodeUrl):
+		res.json({note: 'New Node registered succesfully with node.'});
+		}
+
+	else    {
+		res.json ({note: 'New Node might have already been registered. '});
+		}
 });
 
 
+//This is for the new Node
 app.post('/register-nodes-bulk', function(req, res){
+	//we use this after the new node has been registered to register all the nodes on the new network
+	//Only ever hit on a new node
+	const allNetworkNodes = req.body.allNetworkNodes;
 
-
+	allNetworkNodes.forEach(networkNodeUrl => {
+		const nodeNotAlreadyPresent = bitcoin.networkNodes.indexOf(networkNodeUrl) == -1;
+		const notCurrentNode = bitcoin.currentNodeUrl !== networkNodeUrl;
+		if (nodeNotAlreadyPresent && notCurrentNode) 
+			{
+				bitcoin.networkNodes.push(networkNodeUrl);
+			}
+		else 
+			{
+				res.json({note: 'Some notes are already registered'});
+			}
+	});	
+	res.json({note: 'Bulk Registration Successful.'});
 });
 
 //This creates a new block for us that we can mine
