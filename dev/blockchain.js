@@ -1,7 +1,7 @@
 
 function Blockchain(){
 	this.chain = [];
-	this.newTransactions = [];
+	this.pendingTransactions = [];
 
 }
 
@@ -10,7 +10,7 @@ function Blockchain(){
 
 //you could say class Blockchain{
 
-//	connstructor(){ this.chain = []; this.newTransactions = [];}
+//	connstructor(){ this.chain = []; this.pendingTransactions = [];}
 
 //}
 
@@ -25,7 +25,7 @@ Blockchain.prototype.createNewBlock = function (nonce, previousBlockHash, hash){
 		//timestamp: because wanna know when the block was created
 		timestamp: Date.now(),
 		//wanna put all new transactions in this new block so they can never be changed
-		transactions: this.newTransactions,
+		transactions: this.pendingTransactions,
 		//Nonce property is basically PoF. In our case its a number: 20, 20000 etc. It is a proof that we created this block in a legitimate way. 
 		nonce: nonce,
 		//Hash is basically the data from our new block. We are going to pass our transactions to a hashing function and create a hash. 
@@ -38,7 +38,7 @@ Blockchain.prototype.createNewBlock = function (nonce, previousBlockHash, hash){
 	//Above is how our block will look like
 
 	//Below: after we create new block, we wanna clear our new transactions for the next block
-	this.newTransactions = []; 
+	this.pendingTransactions = []; 
 	//takes the block and adds it to our chain
 	this.chain.push(newBlock);
 	
@@ -53,6 +53,41 @@ Now, we wanna test the method to see if it works properly. The first thing we ne
 test.js
 */
 
+//after testing, now we need to write a method for return last block. 
+//Since we used an array, the following method should do. 
 
+Blockchain.prototype.getLastBlock = function(){
+	return this.chain[this.chain.length-1];
+
+}
+//This is for New transaction
+//@params: amount= amount to send, receiver = receipient, sender = sender person
+Blockchain.prototype.createNewTransaction = function (amount, sender, receiver){
+	//create new Transaction
+
+	const newTransaction = {
+		amount: amount,
+		sender: sender,
+		receiver: receiver, 
+	};
+
+	//all of the transactions we will record will look like above. Now we need to push the new transactions to our array in the constructor function. 
+
+	this.pendingTransactions.push(newTransaction);
+	/*
+		Basically, on our blockchain, there are gonna be a lot of transactions. Everytime a new one is made, we push it in the array. But all the transactions arent recorded yet, i.e aren't
+		recorded yet. They get recorded when a new block is mined, i.e when a new block is created. All of these transactions are basically pending transactions and are validated only when a 
+		new block is created. So, in this commit we are gonna change the pendingTransactions field to pending transactions. We want to return what block we will find our transactions in
+	*/
+
+	//The following: it creates the block that our transaction is added to. Now we will test this. 
+	return this.getLastBlock()['index'] + 1;
+}
+
+
+
+
+
+//The following is for exporting
 module.exports = Blockchain;
 
